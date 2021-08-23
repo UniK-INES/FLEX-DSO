@@ -1,0 +1,190 @@
+{
+    "mRID": "InitialSmdId",
+    "revisionNumber": "1",
+    "type": "A25",
+    "process": null,
+    "createdDateTime": "2019-05-09T15:37:17.640+02:00",
+    "domain_mRID": "ExampleArea",
+    "classificationType": null,
+    "timeSeries": [
+        {
+            "mRID": "timeseries_transformer01",
+            "version": null,
+            "businessType": "A07",
+            "product": "_8716867000016",
+            "objectAggregation": "A02",
+            "inDomain_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "ExampleArea"
+            },
+            "outDomain_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "ExampleArea"
+            },
+            "marketEvaluationPoint": {
+                "codingScheme": "NDE",
+                "mRID": "11X-KS-DIENST1-4_Transformer01"
+            },
+            "in": {
+                "mRID": {
+                    "codingScheme": "NDE",
+                    "mRID": "VNB"
+                },
+                "marketRole": "A13"
+            },
+            "out": {
+                "mRID": {
+                    "codingScheme": "NDE",
+                    "mRID": "EMG"
+                },
+                "marketRole": "A13"
+            },
+            "marketAgreement": {
+                "marketAgreementType": "A06",
+                "mRID": "SampleContract"
+            },
+            "connectingLine_RegisteredResource_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "Sample"
+            },
+            "measure_Unit_name": "KWT",
+            "curveType": "A01",
+            "period": {
+                "resolution": 15,
+                "timeInterval": "2022-01-01T00:00:00.000+02:00/2022-01-01T02:00:00.000+02:00",
+                "points": [
+                    {
+                        "quantity": 10,
+                        "position": 0
+                    },
+                    {
+                        "quantity": 10,
+                        "position": 1
+                    },
+                    {
+                        "quantity": 10,
+                        "position": 2
+                    },
+                    {
+                        "quantity": 10,
+                        "position": 3
+                    },
+                    {
+                        "quantity": 0,
+                        "position": 4
+                    },
+                    {
+                        "quantity": 0,
+                        "position": 5
+                    },
+                    {
+                        "quantity": 0,
+                        "position": 6
+                    },
+                    {
+                        "quantity": 0,
+                        "position": 7
+                    }
+                ]
+            },
+            "reason": null
+        },
+       {
+            "mRID": "timeseries_transformeor02",
+            "version": null,
+            "businessType": "A07",
+            "product": "_8716867000016",
+            "objectAggregation": "A02",
+            "inDomain_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "ExampleArea"
+            },
+            "outDomain_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "ExampleArea"
+            },
+            "marketEvaluationPoint": {
+                "codingScheme": "NDE",
+                "mRID": "11X-KS-DIENST1-4_Transformer02"
+            },
+            "in": {
+                "mRID": {
+                    "codingScheme": "NDE",
+                    "mRID": "VNB"
+                },
+                "marketRole": "A13"
+            },
+            "out": {
+                "mRID": {
+                    "codingScheme": "NDE",
+                    "mRID": "EMG"
+                },
+                "marketRole": "A13"
+            },
+            "marketAgreement": {
+                "marketAgreementType": "A06",
+                "mRID": "SampleContract"
+            },
+            "connectingLine_RegisteredResource_mRID": {
+                "codingScheme": "NDE",
+                "mRID": "Sample"
+            },
+            "measure_Unit_name": "KWT",
+            "curveType": "A01",
+            "period": {
+                "resolution": 15,
+                "timeInterval": "2022-01-01T00:00:00.000+02:00/2022-01-01T02:00:00.000+02:00",
+                "points": [
+                    {
+                        "quantity": 20,
+                        "position": 0
+                    },
+                    {
+                        "quantity": 20,
+                        "position": 1
+                    },
+                    {
+                        "quantity": 20,
+                        "position": 2
+                    },
+                    {
+                        "quantity": 20,
+                        "position": 3
+                    },
+                    {
+                        "quantity": -10,
+                        "position": 4
+                    },
+                    {
+                        "quantity": -10,
+                        "position": 5
+                    },
+                    {
+                        "quantity": -10,
+                        "position": 6
+                    },
+                    {
+                        "quantity": -10,
+                        "position": 7
+                    }
+                ]
+            },
+            "reason": null
+        }
+    ],
+    "timeInterval": "2022-01-01T00:00:00.000+02:00/2022-01-01T02:00:00.000+02:00",
+    "receiver_MarketParticipant": {
+        "mRID": {
+            "codingScheme": "NDE",
+            "mRID": "Client"
+        },
+        "marketRole": "A32"
+    },
+    "sender_MarketParticipant": {
+        "mRID": {
+            "codingScheme": "NDE",
+            "mRID": "VNB"
+        },
+        "marketRole": "A11"
+    }
+}
