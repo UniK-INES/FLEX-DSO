@@ -11,5 +11,5 @@ RUN chmod -o+x /home/li20/python/dso-testclient/client/dsoTest.sh
 RUN chmod 777 /home/li20/python/dso-testclient/shell.sh
 RUN chmod 777 /home/li20/python/dso-testclient/client/dsoApp.sh
 
-CMD ["/home/li20/python/dso-testclient/client/dsoApp.sh"]
+CMD ["/home/li20/python/dso-testclient/startTestclient.sh"]
 

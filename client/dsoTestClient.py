@@ -1,8 +1,49 @@
 '''
+This file is part of INES FLEX - 
+INES (Integrated Energy Systems) FLexibility Energy eXchange
+
+INES FLEX is free software: You can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+INES FLEX is distributed in the hope that it will be useful, but 
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Copyright (C) 2021
+Department of Integrated Energy Systems, University of Kassel,
+Kassel, Germany
+
+---
+
+The DSO test client request time information from the flex server and
+passes flex demand to it accordingly, either based on given quantity file
+or random if quantity is not available for requested interval.
+
+Required modules: see requirements.txt
+
+Relevant Env. Vars.:
+
+DSO_PARAM_FILENAME (default: ../params/dso_parameters.csv)
+DSO_PARAM_ID (default: 1)
+DSO_PRODUCTID (default: 3; only considered when not passed and not in params file)
+DSO_DEMANDCURVE (default: 1; only considered when not in params file)
+DSO_PROTOTYPE_FILENAME (default: smdProto.json)
+DSO_QUANTITY_FILENAME (default: ../data/time_series_15min_singleindex_LoadSolarWind_50Hz_JulySep2020.csv)
+DSO_QUANTITY_START (default: 2020-08-17)
+DSO_QUANTITY_END (default: 2020-08-28)
+DSO_QUANTITY_FACTOR (default: 0.01; only considered when not in params file)
+---
+
 Created on 02.02.2021
 
 @author: Sascha Holzhauer
 '''
+
 from time import sleep
 from random import Random
 from base64 import b64encode
@@ -17,10 +58,13 @@ import logging
 from util import *
 from math import ceil
 import csv
+import inspect
 
-# namedtuple not used because of issues with keys ("in") and immutability
-#def smdDecoder(smdDict):
-#    return namedtuple('X', smdDict.keys())(*smdDict.values())
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir) 
+import secrets_local
+
 
 class DsoTestClient(object):
     '''
@@ -28,9 +72,24 @@ class DsoTestClient(object):
     '''
     
     def __init__(self, flexserver, loglevel="DEBUG", productId=None, flexDemandAdvance=1000*60*60, 
-                 username = "username = secrets_local.flexserver_username", password=secrets_local.flexserver_password):
+                 username = flexserver_username, password=flexserver_password):
         '''
         Constructor
+        
+        Parameters
+        ----------
+        flexserver: string
+            flexserver hostname
+        loglevel: string
+            log level (default: DEBUG)
+        productId: int
+            considered market product id (default: from param file > env. var. DSO_PRODUCTID) 
+        flexDemandAdvance: int
+            time to pass flex demand in advance in ms (default: 3600000)
+        username: string
+            username to access flex server
+        passwort: string
+            password to access flex server
         '''
         
         numeric_level = getattr(logging, loglevel.upper(), None)
@@ -48,7 +107,8 @@ class DsoTestClient(object):
         self.params = params[params['ID']==paramId]    
         
         if productId is None:
-            self.productId = int(self.params['DSO_PRODUCTID']) if 'DSO_PRODUCTID' in self.params.dtype.names else int(os.getenv("DSO_PRODUCTID", 3))
+            self.productId = int(self.params['DSO_PRODUCTID']) if \
+            ('DSO_PRODUCTID' in self.params.dtype.names and len(self.params) > 0) else int(os.getenv("DSO_PRODUCTID", 3))
         else:
             self.productId = productId
         logging.debug("Operating with market product ID " + str(self.productId))
@@ -56,7 +116,8 @@ class DsoTestClient(object):
         self.flexDemandAdvance = flexDemandAdvance
         
         
-        self.demandcurve =  int(self.params['DSO_DEMANDCURVE']) if 'DSO_DEMANDCURVE' in self.params.dtype.names else int(os.getenv('DSO_DEMANDCURVE',1))
+        self.demandcurve =  int(self.params['DSO_DEMANDCURVE']) if \
+        ('DSO_DEMANDCURVE' in self.params.dtype.names and len(self.params) > 0) else int(os.getenv('DSO_DEMANDCURVE',1))
         logging.warn("Set demandcurve to :" + str(self.demandcurve))
         
         self.active = True
@@ -69,7 +130,7 @@ class DsoTestClient(object):
         self.smdPrototypeFilename = os.getenv("DSO_PROTOTYPE_FILENAME", 'smdProto.json')
         self.sendCounter = 0
         
-        quantityDataFilename = os.getenv("DSO_QUANTITY_FILENAME", '../data/time_series_15min_singleindex_LoadSolarWind_D_JulySep2020.csv')
+        quantityDataFilename = os.getenv("DSO_QUANTITY_FILENAME", '../data/time_series_15min_singleindex_LoadSolarWind_50Hz_JulySep2020.csv')
         start = os.getenv("DSO_QUANTITY_START",'2020-08-17')
         end = os.getenv("DSO_QUANTITY_END",'2020-08-28')
          
@@ -93,7 +154,8 @@ class DsoTestClient(object):
         
         self.quantityMaxLoad = np.max(self.quantitydata['load']-self.quantitydata['solar']-self.quantitydata['wind'])
         self.quantityMinLoad = np.min(self.quantitydata['load']-self.quantitydata['solar']-self.quantitydata['wind'])
-        self.quantityFactor = float(params['DSO_QUANTITY_FACTOR']) if 'DSO_QUANTITY_FACTOR' in self.params.dtype.names else float(os.getenv("DSO_QUANTITY_FACTOR", 0.01))
+        self.quantityFactor = float(params['DSO_QUANTITY_FACTOR']) if \
+        ('DSO_QUANTITY_FACTOR' in self.params.dtype.names and len(self.params) > 0) else float(os.getenv("DSO_QUANTITY_FACTOR", 0.01))
         
         self.seed = 1
         self.ran = Random(self.seed)
