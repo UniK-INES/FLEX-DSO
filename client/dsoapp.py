@@ -58,7 +58,7 @@ app = Flask(__name__, template_folder="../template")
 auth = HTTPBasicAuth()
 
 users = {
-    webapp_username: generate_password_hash(webapp_password)
+    secrets_local.webapp_username: generate_password_hash(secrets_local.webapp_password)
 }
 
 @auth.verify_password

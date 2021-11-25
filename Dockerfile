@@ -7,9 +7,9 @@ RUN pip install -r ./requirements.txt
 COPY . /home/li20/python/dso-testclient
 
 WORKDIR /home/li20/python/dso-testclient/client
-RUN chmod -o+x /home/li20/python/dso-testclient/client/dsoTest.sh
 RUN chmod 777 /home/li20/python/dso-testclient/shell.sh
-RUN chmod 777 /home/li20/python/dso-testclient/client/dsoApp.sh
+RUN chmod 777 /home/li20/python/dso-testclient/startTestclient.sh
+RUN chmod 777 /home/li20/python/dso-testclient/startWebapp.sh
 
 CMD ["/home/li20/python/dso-testclient/startTestclient.sh"]
 

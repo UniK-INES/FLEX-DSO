@@ -44,7 +44,7 @@ sys.path.insert(0, parentdir)
 import secrets_local
 
 if __name__ == '__main__':
-    flexserver = os.getenv('FLEX_SERVER', flexserver_default)        
+    flexserver = os.getenv('FLEX_SERVER', secrets_local.flexserver_default)        
     loglevel = os.getenv('DSO_LOGLEVEL','INFO')
     
     dso = dso.DsoTestClient(flexserver, loglevel = loglevel)

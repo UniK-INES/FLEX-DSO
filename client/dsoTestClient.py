@@ -72,7 +72,7 @@ class DsoTestClient(object):
     '''
     
     def __init__(self, flexserver, loglevel="DEBUG", productId=None, flexDemandAdvance=1000*60*60, 
-                 username = flexserver_username, password=flexserver_password):
+                 username = secrets_local.flexserver_username, password=secrets_local.flexserver_password):
         '''
         Constructor
         
@@ -259,11 +259,14 @@ class DsoTestClient(object):
             except ConnectionError:
                 logging.warn("FlexServer not available. Reattempting after %d seconds.", 60)
                 sleep(60)
-            
-        self.tinfo = json.loads(response.content)
-        self.nowSim = dt.datetime(1970, 1, 1) + dt.timedelta(milliseconds = self.tinfo['currentSimulationTime'])
-        self.nextDayStart = self.nowSim.replace(day=self.nowSim.day, hour=0, minute=0, second = 0) + dt.timedelta(days=1)
-        logging.debug(json.dumps(self.tinfo, indent=4, sort_keys=False))
+        if response.status_code == 401:
+            logging.error("Access denied (username: " + self.username + ")!")
+            sys.exit()
+        else:
+            self.tinfo = json.loads(response.content)
+            self.nowSim = dt.datetime(1970, 1, 1) + dt.timedelta(milliseconds = self.tinfo['currentSimulationTime'])
+            self.nextDayStart = self.nowSim.replace(day=self.nowSim.day, hour=0, minute=0, second = 0) + dt.timedelta(days=1)
+            logging.debug(json.dumps(self.tinfo, indent=4, sort_keys=False))
 
     def getNextSleepDuration(self):
         self.getTimeInformation()
