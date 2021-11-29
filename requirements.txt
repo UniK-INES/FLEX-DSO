@@ -1,0 +1,6 @@
+requests
+argparse
+datetime
+flask
+flask_httpauth
+numpy
